@@ -1,6 +1,8 @@
 package me.seop.thejavatest;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Duration;
 
@@ -55,5 +57,18 @@ class StudyTest {
         assumingThat(false, () -> {
             System.out.println("false");
         });
+    }
+
+    @DisplayName("반복 테스트")
+    @RepeatedTest(value = 10, name = "{displayName}, {currentRepetition}/{totalRepetitions}")
+    void repeatTest(RepetitionInfo repetitionInfo) {
+        System.out.println("repeat " + repetitionInfo.getCurrentRepetition() + "/" + repetitionInfo.getTotalRepetitions());
+    }
+
+    @DisplayName("파라미터 반복")
+    @ParameterizedTest(name = "{index} {displayName} message={0}")
+    @ValueSource(strings = {"justhis","palo","dean","crush"})
+    void parameterized(String message) {
+        System.out.println(message);
     }
 }
