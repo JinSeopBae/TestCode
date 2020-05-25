@@ -9,6 +9,8 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class StudyTest {
@@ -40,5 +42,20 @@ class StudyTest {
                     Thread.sleep(300);
                 })
         );
+    }
+
+    @Test
+    void assume() {
+//        String test_env = System.getenv("TEST_ENV");
+//        System.out.println("test_env : " + test_env);
+//        assumeTrue("LOCAL".equalsIgnoreCase(test_env));
+//        assertTrue(true);
+        assumingThat(true, () -> {
+            System.out.println("true");
+        });
+
+        assumingThat(false, () -> {
+            System.out.println("false");
+        });
     }
 }
