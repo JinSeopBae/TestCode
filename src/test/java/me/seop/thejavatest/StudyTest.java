@@ -1,9 +1,6 @@
 package me.seop.thejavatest;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.Duration;
 
@@ -17,6 +14,7 @@ class StudyTest {
 
     @Test
     @DisplayName("스터디 만들기 \uD83D\uDE31")
+    @FastTest
     void create() {
         //Study study = new Study(5);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Study(-10));
