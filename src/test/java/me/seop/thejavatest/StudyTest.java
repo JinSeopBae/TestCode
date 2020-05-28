@@ -18,10 +18,12 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 // 인스턴스 생명주기 지정
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 // 메서드 실행순서 제어
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudyTest {
+
+    int value = 1;
 
     @BeforeAll
     void beforeAll(){}
@@ -38,6 +40,7 @@ class StudyTest {
     @FastTest
     void create() {
         //Study study = new Study(5);
+        System.out.println(value++);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Study(-10));
         assertAll(
                 () -> assertEquals("0보다 커야 한다",exception.getMessage())
@@ -51,6 +54,7 @@ class StudyTest {
     @Test
     @DisplayName("해당 메서드가 10초안에 끝나야함")
     void timeout() {
+        System.out.println(value++);
         assertAll(
                 () -> assertTimeout(Duration.ofMillis(1000), () -> {
                     new Study(10);
