@@ -17,7 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+// 인스턴스 생명주기 지정
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+// 메서드 실행순서 제어
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudyTest {
 
     @BeforeAll
@@ -29,6 +32,7 @@ class StudyTest {
 
     }
 
+    @Order(2)
     @Test
     @DisplayName("스터디 만들기 \uD83D\uDE31")
     @FastTest
@@ -43,16 +47,16 @@ class StudyTest {
         );
     }
 
+    @Order(1)
     @Test
     @DisplayName("해당 메서드가 10초안에 끝나야함")
     void timeout() {
         assertAll(
-                () -> assertTimeout(Duration.ofMillis(100), () -> {
+                () -> assertTimeout(Duration.ofMillis(1000), () -> {
                     new Study(10);
-                    Thread.sleep(300);
                 }),
                 // ThreadLocal 사용 시 문제 발생 여
-                () -> assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
+                () -> assertTimeoutPreemptively(Duration.ofMillis(1000), () -> {
                     new Study(10);
                     Thread.sleep(300);
                 })
