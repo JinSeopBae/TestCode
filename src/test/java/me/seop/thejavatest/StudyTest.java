@@ -1,7 +1,9 @@
 package me.seop.thejavatest;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -21,9 +23,13 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 // 메서드 실행순서 제어
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith(FileSlowTestExtension.class)
 class StudyTest {
 
     int value = 1;
+
+    @RegisterExtension
+    static FileSlowTestExtension fileSlowTestExtension = new FileSlowTestExtension(1000L);
 
     @BeforeAll
     void beforeAll(){}
@@ -37,9 +43,10 @@ class StudyTest {
     @Order(2)
     @Test
     @DisplayName("스터디 만들기 \uD83D\uDE31")
-    @FastTest
-    void create() {
+    @SlowTest
+    void create() throws InterruptedException {
         //Study study = new Study(5);
+        Thread.sleep(1005L);
         System.out.println(value++);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Study(-10));
         assertAll(
