@@ -1,5 +1,6 @@
 package me.seop.thejavatest;
 
+import me.seop.thejavatest.domain.Study;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
