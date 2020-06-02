@@ -5,21 +5,15 @@ import me.seop.thejavatest.domain.Study;
 import me.seop.thejavatest.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StudyServiceTest {
@@ -41,18 +35,19 @@ class StudyServiceTest {
         member.setId(1L);
         member.setEmail("hazard@email.com");
 
-        when(memberService.findById(any()))
-                .thenReturn(Optional.of(member))
-                .thenThrow(new RuntimeException())
-                .thenReturn(Optional.empty());
+        Study study = new Study(10,"test");
 
-        Optional<Member> byId = memberService.findById(1L);
-        assertEquals("hazard@email.com",byId.get().getEmail());
+        when(memberService.findById(1L)).thenReturn(Optional.of(member));
+        when(studyRepository.save(study)).thenReturn(study);
 
-        assertThrows(RuntimeException.class, () -> {
-            memberService.findById(2L);
-        });
+        studyService.createNewStudy(1L,study);
 
-        assertEquals(Optional.empty(), memberService.findById(3L));
+        assertEquals(member, study.getOwner());
+
+        verify(memberService, times(1)).notify(study);
+        verifyNoMoreInteractions(memberService);
+//        verify(memberService, times(1)).notify(member);
+//        verify(memberService, never()).validate(any());
+
     }
 }
