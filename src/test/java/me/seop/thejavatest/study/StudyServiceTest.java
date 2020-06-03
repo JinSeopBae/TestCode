@@ -63,4 +63,24 @@ class StudyServiceTest {
 //        verify(memberService, never()).validate(any());
 
     }
+
+    @DisplayName("스터디 공개")
+    @Test
+    void openStudy() {
+
+        // Given
+        StudyService studyService = new StudyService(memberService,studyRepository);
+        Study study = new Study(10,"test");
+
+        given(studyRepository.save(study)).willReturn(study);
+
+        // When
+        studyService.openStudy(study);
+
+        // Then
+        assertEquals(StudyStatus.OPENED,study.getStatus());
+        assertNotNull(study.getOpenedDateTime());
+        then(memberService).should().notify(study);
+
+    }
 }
